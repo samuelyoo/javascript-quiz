@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Timed Multiple Choice Quiz</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+</head>
+<body>
+    <!--    GIVEN I am taking a code quiz
+            WHEN I click the start button
+            THEN a timer starts and I am presented with a question
+            WHEN I answer a question
+            THEN I am presented with another question
+            WHEN I answer a question incorrectly
+            THEN time is subtracted from the clock
+            WHEN all questions are answered or the timer reaches 0
+            THEN the game is over
+            WHEN the game is over
+            THEN I can save my initials and score
+            -->
+
+    <!-- navbar to show time and score -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <span class="navbar-brand mb-0 h1">JavaScript Quiz</span>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a>Time Left:  <span id="timer"></span></a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main page / instruction and descirption -->
+    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" id="main">
+        <h1 class="display-4">JavaScirpt QUIZ</h1>
+        <h3 id ="description">
+            You have 100 seconds.</br>
+            If you choose a wrong answer the points(time) will subtract 5 seconds from the time remaining.</br>
+            At the end you will be asked to submit your initial and socre.</br>
+            <strong>Do Your Best!</strong></br>  
+            Don't worry this is easy!</br>
+        </h3>
+        <button id ="start">Start</button>
+    </div>
+
+
+    <!-- quiz Box that keep change -->
+    <div id="quizBox">
+        <div id="questions"></div>
+        <div id="choice1" class="multipleChoice"></div>
+        <div id="choice2" class="multipleChoice"></div>
+        <div id="choice3" class="multipleChoice"></div>
+        <div id="answerCheck"></div>
+    </div>
+
+    <script>
+        var startBtn = document.querySelector('#start');
+        var timerEl = document.querySelector('#timer');
+        var quizBox = document.querySelector('#quizBox');
+        var startPage = document.querySelector('#description');
+        var decisionMade = document.querySelectorAll('.multipleChoice')
+        // questions list and answers
+        var quizBox = [
+            {
+                questions: '1. Inside which HTML element do we put the JavaScript?',
+                multipleChoice: [
+                    'script',
+                    'js',
+                    'javaScript',
+                ],
+                quizAnswer: 'script'
+            },{
+                questions: '2. Where is the correct place to insert a JavaScript?',
+                multipleChoice: [
+                    'body section',
+                    'body and head section',
+                    'head section',
+                ],
+                quizAnswer: 'head section'
+            },{
+                questions: '3. What is the correct syntax for referring to an external script called "xxx.js"?',
+                multipleChoice: [
+                    'script name = "xxx.js"',
+                    'script href = "xxx.js"',
+                    'script src = "xxx.js"',
+                ],
+                quizAnswer: 'script src = "xxx.js'
+            },{
+                questions: '4. How do you write "Hello World" in an alert box?',
+                multipleChoice: [
+                    'msgBox("Hello World");',
+                    'alert("Hello World");',
+                    'alertBox("Hello World");',
+                ],
+                quizAnswer: 'alert("Hello World");'
+            },{
+                questions: '5. How do you create a function in JavaScript?',
+                multipleChoice: [
+                    'function:myFunction()',
+                    'function myFunction()',
+                    'function = myFunction()',
+                ],
+                quizAnswer: 'function myFunction()'
+            },{
+                questions: '6. How do you call a function named "myFunction"?',
+                multipleChoice: [
+                    'call myFunction()',
+                    'myFunction',
+                    'myFunction()',
+                ],
+                quizAnswer: 'myFunction()'
+            },{
+                questions: '7. How does a WHILE loop start?',
+                multipleChoice: [
+                    'while i++',
+                    'while (i<=10; i++)',
+                    'while i = 1 to 10',
+                ],
+                quizAnswer: 'while (i<=10; i++)'
+            }, {
+                questions: '8. Which event occurs when the user clicks on an HTML element?',
+                multipleChoice: [
+                    'onmouseover',
+                    'onchange',
+                    'onclick',
+                ],
+                quizAnswer: 'onclick'
+            }
+            ];
+
+        // Start Button
+        startBtn.addEventListener('click', function(){
+            toggleShowStartPage();
+            quizBox.style.display = 'block';
+            startTime();
+        })
+
+        // Show Start Page
+        function toggleShowStartPage(){
+            if (startPage.style.display === 'none'){
+                startPage.style.display = 'block';
+            } else {
+                startPage.style.display = 'none';
+            }
+        }
+
+        // Showing Quizes
+        function showingQuizes(){
+            document.getElementById('question').textContent = questions;
+            document.getElementById('choice1').textContent = multipleChoice[0]
+            document.getElementById('choice2').textContent = multipleChoice[1]
+            document.getElementById('choice3').textContent = multipleChoice[2]
+        }
+        quizBox.classList.toggle('show');
+
+        // Timer
+        var timer = 0;
+        var totalTimeLeft =100;
+        var timeInterval;
+
+        function startTime(){
+            timeInterval = setInterval(function(){
+                totalTimeLeft --;
+                timerEl.textContent = totalTimeLeft;
+
+                if (totalTimeLeft == 0 ){
+                    clearInterval(timeInterval);
+                    // stop Need to finish function
+                }
+            },1000);
+        }
+
+        // Subtract Time 
+        function incorrectAns(){
+            totalTimeLeft = totalTimeLeft -5;
+            answerCheck.textContent = "Incorrect";
+        }
+
+        // Decision Making
+        decisionMade.forEach(function (button) {
+            button.addEventListener('click', function () {
+                var userChoice = this.textContent;
+                var quizAnswer = quizes[counter].correct;
+                if (userChoice === quizAnswer) {
+                    answerCheck.textContent = "Correct";
+                    console.log({ userChoice, currentCorrectAnswer });
+                } else {
+                    incorrectAns();
+                }
+                counter++;
+                if (counter===6) {
+                    alert (`It's Done!!!  Your Score is ${totalTImeLeft}`)
+                    clearInterval (timerInterval);
+                } else{
+                    renderQuestions();
+                }
+            });
+        });
+        quizBox.style.display = 'none';
+    </script>
+
+
+</body>
+</html>
