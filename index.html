@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JavaScript Timed Multiple Choice Quiz</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    <style>
+        .show {
+            display: block;
+        }
+    </style>
 </head>
 <body>
     <!--    GIVEN I am taking a code quiz
@@ -21,7 +26,7 @@
             -->
 
     <!-- navbar to show time and score -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-sm navbar-light bg-light">
         <span class="navbar-brand mb-0 h1">JavaScript Quiz</span>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav">
@@ -34,7 +39,7 @@
 
     <!-- Main page / instruction and descirption -->
     <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" id="main">
-        <h1 class="display-4">JavaScirpt QUIZ</h1>
+        <h1 class="subTitle">JavaScirpt QUIZ</h1>
         <h3 id ="description">
             You have 100 seconds.</br>
             If you choose a wrong answer the points(time) will subtract 5 seconds from the time remaining.</br>
@@ -58,8 +63,8 @@
     <script>
         var startBtn = document.querySelector('#start');
         var timerEl = document.querySelector('#timer');
-        var quizBox = document.querySelector('#quizBox');
-        var startPage = document.querySelector('#description');
+        var quizBoxEl = document.getElementById('quizBox');
+        var startPage = document.querySelector('#main');
         var decisionMade = document.querySelectorAll('.multipleChoice')
         // questions list and answers
         var quizBox = [
@@ -133,7 +138,8 @@
         // Start Button
         startBtn.addEventListener('click', function(){
             toggleShowStartPage();
-            quizBox.style.display = 'block';
+            quizBoxEl.style.display = 'block';
+            showingQuizes();
             startTime();
         })
 
@@ -146,27 +152,29 @@
             }
         }
 
+        // quizBox.classList.toggle("show");
+
         // Showing Quizes
         function showingQuizes(){
-            document.getElementById('question').textContent = questions;
-            document.getElementById('choice1').textContent = multipleChoice[0]
-            document.getElementById('choice2').textContent = multipleChoice[1]
-            document.getElementById('choice3').textContent = multipleChoice[2]
+            document.getElementById('questions').textContent = quizBox[timer].questions;
+            document.getElementById('choice1').textContent = quizBox[timer].multipleChoice[0];
+            document.getElementById('choice2').textContent = quizBox[timer].multipleChoice[1];
+            document.getElementById('choice3').textContent = quizBox[timer].multipleChoice[2];
         }
-        quizBox.classList.toggle('show');
-
+        
         // Timer
         var timer = 0;
         var totalTimeLeft =100;
         var timeInterval;
-
+        
         function startTime(){
             timeInterval = setInterval(function(){
                 totalTimeLeft --;
                 timerEl.textContent = totalTimeLeft;
-
                 if (totalTimeLeft == 0 ){
                     clearInterval(timeInterval);
+                    timer = 8;
+                    showingQuizes();
                     // stop Need to finish function
                 }
             },1000);
@@ -182,23 +190,23 @@
         decisionMade.forEach(function (button) {
             button.addEventListener('click', function () {
                 var userChoice = this.textContent;
-                var quizAnswer = quizes[counter].correct;
+                var quizAnswer = quizes[timer].correct;
                 if (userChoice === quizAnswer) {
                     answerCheck.textContent = "Correct";
                     console.log({ userChoice, currentCorrectAnswer });
                 } else {
                     incorrectAns();
                 }
-                counter++;
-                if (counter===6) {
-                    alert (`It's Done!!!  Your Score is ${totalTImeLeft}`)
-                    clearInterval (timerInterval);
+                timer++;
+                if (timer===8) {
+                    alert (`It's Done!!!  Your Score is ${totalTimeLeft}`)
+                    clearInterval (timeInterval);
                 } else{
-                    renderQuestions();
+                    showingQuizes();
                 }
             });
         });
-        quizBox.style.display = 'none';
+        quizBoxEl.style.display = 'none';
     </script>
 
 
