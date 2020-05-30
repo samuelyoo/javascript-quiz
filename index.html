@@ -12,14 +12,14 @@
     </style>
 </head>
 <body>
-    <!--    GIVEN I am taking a code quiz
-            WHEN I click the start button
-            THEN a timer starts and I am presented with a question
-            WHEN I answer a question
-            THEN I am presented with another question
-            WHEN I answer a question incorrectly
-            THEN time is subtracted from the clock
-            WHEN all questions are answered or the timer reaches 0
+    <!--    GIVEN I am taking a code quiz v
+            WHEN I click the start button v
+            THEN a timer starts and I am presented with a question v
+            WHEN I answer a question v
+            THEN I am presented with another question v
+            WHEN I answer a question incorrectly v
+            THEN time is subtracted from the clock v
+            WHEN all questions are answered or the timer reaches 0 v
             THEN the game is over
             WHEN the game is over
             THEN I can save my initials and score
@@ -41,7 +41,7 @@
     <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center" id="main">
         <h1 class="subTitle">JavaScirpt QUIZ</h1>
         <h3 id ="description">
-            You have 100 seconds.</br>
+            You have 50 seconds.</br>
             If you choose a wrong answer the points(time) will subtract 5 seconds from the time remaining.</br>
             At the end you will be asked to submit your initial and socre.</br>
             <strong>Do Your Best!</strong></br>  
@@ -57,7 +57,6 @@
         <div id="choice1" class="multipleChoice"></div>
         <div id="choice2" class="multipleChoice"></div>
         <div id="choice3" class="multipleChoice"></div>
-        <div id="answerCheck"></div>
     </div>
 
     <script>
@@ -66,6 +65,7 @@
         var quizBoxEl = document.getElementById('quizBox');
         var startPage = document.querySelector('#main');
         var decisionMade = document.querySelectorAll('.multipleChoice')
+        
         // questions list and answers
         var quizBox = [
             {
@@ -164,17 +164,24 @@
         
         // Timer
         var timer = 0;
-        var totalTimeLeft =100;
+        var totalTimeLeft =50;
         var timeInterval;
         
+
         function startTime(){
             timeInterval = setInterval(function(){
                 totalTimeLeft --;
                 timerEl.textContent = totalTimeLeft;
-                if (totalTimeLeft == 0 ){
+                if (totalTimeLeft <= 0 ){
                     clearInterval(timeInterval);
                     timer = 8;
-                    showingQuizes();
+                    // when time or socre were hit 0 ask for try again
+                    var check = confirm("Time is over Please try again");
+                        if (check ==true){
+                        location.reload();
+                    } else{// may be set it to the default page
+                        location.reload();
+                    }
                     // stop Need to finish function
                 }
             },1000);
@@ -183,16 +190,15 @@
         // Subtract Time 
         function incorrectAns(){
             totalTimeLeft = totalTimeLeft -5;
-            answerCheck.textContent = "Incorrect";
         }
 
         // Decision Making
         decisionMade.forEach(function (button) {
             button.addEventListener('click', function () {
                 var userChoice = this.textContent;
-                var quizAnswer = quizes[timer].correct;
+                var quizAnswer = quizBox[timer].correct;
+                var username = localStorage.getItem("username");
                 if (userChoice === quizAnswer) {
-                    answerCheck.textContent = "Correct";
                     console.log({ userChoice, currentCorrectAnswer });
                 } else {
                     incorrectAns();
@@ -201,11 +207,21 @@
                 if (timer===8) {
                     alert (`It's Done!!!  Your Score is ${totalTimeLeft}`)
                     clearInterval (timeInterval);
+                    // ask for user Name and save the info(name and score) to a local storage.
+                    var userName = localStorage.getItem("userName")
+                    if(!userName){
+                        userName = prompt("Please enter your name or initial");
+                        localStorage.setItem("UserNameScore", [userName, totalTimeLeft]);
+                    }
                 } else{
                     showingQuizes();
                 }
             });
         });
+
+        // when time done
+
+
         quizBoxEl.style.display = 'none';
     </script>
 
