@@ -15,10 +15,10 @@ To take this quiz you can click : [here](https://samuelyoo.github.io/javascript-
 
 ### Usage
 When user click the start button, then the quiz will begin and timeer will be start. </br>
-please click a setenece or a word to choose your answers, and it will show a next question.
-(If you choose wrong answer it will subtract 5 seoncs from total time remain.)
-(also when timer hit 0 you have to restart your quiz.)
-When you finish quiz enter your name or initial to submit a score and name.
+please click a setenece or a word to choose your answers, and it will show a next question.</br>
+(If you choose wrong answer it will subtract 5 seoncs from total time remain.)</br>
+(also when timer hit 0 you have to restart your quiz.)</br>
+When you finish quiz enter your name or initial to submit a score and name.</br>
 
 #### Contact
 Email: sam.hc.yoo@gmail.com
